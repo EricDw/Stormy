@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Stormy</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="alert_dialog_error_title">Oops! Sorry</string>
+    <string name="alert_dialog_error_message">There was an error please try again!</string>
+    <string name="alert_dialog_button_positive">OK</string>
+    <string name="network_connection_message">Network connection unavailable</string>
+</resources>
