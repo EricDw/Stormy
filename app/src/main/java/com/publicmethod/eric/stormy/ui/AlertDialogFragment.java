@@ -1,4 +1,4 @@
-package com.publicmethod.eric.stormy;
+package com.publicmethod.eric.stormy.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

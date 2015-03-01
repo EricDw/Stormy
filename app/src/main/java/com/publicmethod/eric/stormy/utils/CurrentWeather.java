@@ -1,4 +1,6 @@
-package com.publicmethod.eric.stormy;
+package com.publicmethod.eric.stormy.utils;
+
+import com.publicmethod.eric.stormy.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,6 +18,7 @@ public class CurrentWeather {
     private double mPrecipChance;
     private String mSummary;
     private String mTimeZone;
+    private String mPrecipType = "PRECIPITATION";
 
     public int getIconId() {
         // clear-day, clear-night, rain, snow, sleet, wind, fog, cloudy, partly-cloudy-day, or partly-cloudy-night
@@ -119,4 +122,12 @@ public class CurrentWeather {
     public void setTimeZone(String timeZone) {
         mTimeZone = timeZone;
 }
+    public void setPrecipType(String precipType) {
+        mPrecipType = precipType;
+        
+    }
+    public String getPrecipType(){
+        return mPrecipType;
+        
+    }
 }

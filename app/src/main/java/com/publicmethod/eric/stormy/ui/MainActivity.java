@@ -1,4 +1,4 @@
-package com.publicmethod.eric.stormy;
+package com.publicmethod.eric.stormy.ui;
 
 import android.content.Context;
 import android.content.IntentSender;
@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.publicmethod.eric.stormy.R;
+import com.publicmethod.eric.stormy.utils.CurrentWeather;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
@@ -33,7 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 
-public class MainActivity extends ActionBarActivity implements 
+public class MainActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
@@ -60,6 +62,8 @@ public class MainActivity extends ActionBarActivity implements
     ImageView mRefreshView;
     @InjectView(R.id.progressBar)
     ProgressBar mProgressBar;
+    @InjectView(R.id.precipLabel)
+    TextView mPrecipLabel;
     private double mLatitude;
     private double mLongitude;
     private CurrentWeather mCurrentWeather;
@@ -79,12 +83,11 @@ public class MainActivity extends ActionBarActivity implements
 //        setLongitude(-122.423);
 
 
-
         mRefreshView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                getForcast(getLatitude(),getLongitude());
+                getForcast(getLatitude(), getLongitude());
             }
         });
 
@@ -109,7 +112,7 @@ public class MainActivity extends ActionBarActivity implements
                 @Override
                 public void onFailure(Request request, IOException e) {
 
-                    runOnUiThread( new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             toggleRefresh();
@@ -145,8 +148,7 @@ public class MainActivity extends ActionBarActivity implements
                                 }
                             });
                             Log.v(TAG, jsonData);
-                        }
-                        else {
+                        } else {
                             Log.v(TAG, jsonData);
                             alertUserAboutError(AlertDialogFragment.TITLE_KEY,
                                     getString(R.string.alert_dialog_error_title),
@@ -155,14 +157,12 @@ public class MainActivity extends ActionBarActivity implements
                                     AlertDialogFragment.BUTTON_KEY,
                                     getString(R.string.alert_dialog_button_positive));
                         }
-                    }
-                    catch (IOException | JSONException e) {
+                    } catch (IOException | JSONException e) {
                         Log.e(TAG, "Exception caught: ", e);
                     }
                 }
             });
-        }
-        else {
+        } else {
             alertUserAboutError(AlertDialogFragment.TITLE_KEY,
                     getString(R.string.alert_dialog_error_title),
                     AlertDialogFragment.MESSAGE_KEY,
@@ -177,13 +177,12 @@ public class MainActivity extends ActionBarActivity implements
         if (mProgressBar.getVisibility() == View.INVISIBLE) {
             mProgressBar.setVisibility(View.VISIBLE);
             mRefreshView.setVisibility(View.INVISIBLE);
-            Log.d(TAG,"bar visible at line 160");
-        }
-        else {
+            Log.d(TAG, "bar visible at line 160");
+        } else {
 
             mProgressBar.setVisibility(View.INVISIBLE);
             mRefreshView.setVisibility(View.VISIBLE);
-            Log.d(TAG,"bar invisible at line 168");
+            Log.d(TAG, "bar invisible at line 168");
         }
 
     }
@@ -195,12 +194,14 @@ public class MainActivity extends ActionBarActivity implements
         mPrecipValue.setText(mCurrentWeather.getPrecipChance() + "%");
         mSummaryText.setText(mCurrentWeather.getSummary());
         mLocationLabel.setText("Where you are standing!");
+        mPrecipLabel.setText(mCurrentWeather.getPrecipType());
+
 
         Drawable icon = getResources().getDrawable(mCurrentWeather.getIconId());
         mIconImageView.setImageDrawable(icon);
 
     }
-    
+
     private void alertUserAboutError(String titleKey,
                                      String titleValue,
                                      String messageKey,
@@ -229,9 +230,9 @@ public class MainActivity extends ActionBarActivity implements
     private void handleNewLocation(Location location) {
         mLatitude = location.getLatitude();
         mLongitude = location.getLongitude();
-        getForcast(mLatitude,mLongitude);
+        getForcast(mLatitude, mLongitude);
     }
-    
+
     private CurrentWeather getCurrentDetails(String jsonData) throws JSONException {
         JSONObject forcast = new JSONObject(jsonData);
         String timezone = forcast.getString("timezone");
@@ -248,6 +249,10 @@ public class MainActivity extends ActionBarActivity implements
         currentWeather.setTemperature(currently.getDouble("temperature"));
         currentWeather.setSummary(currently.getString("summary"));
         currentWeather.setTimeZone(timezone);
+
+        if (currently.getString("precipType") != null) {
+            currentWeather.setPrecipType(currently.getString("precipType").toUpperCase());
+        }
         Log.i(TAG, "From JSON: " + currentWeather.getFormattedTime());
 
 
@@ -275,7 +280,7 @@ public class MainActivity extends ActionBarActivity implements
     public double getLongitude() {
         return mLongitude;
     }
-   
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -289,13 +294,13 @@ public class MainActivity extends ActionBarActivity implements
             mGoogleApiClient.disconnect();
         }
     }
+
     @Override
     public void onConnected(Bundle bundle) {
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location == null) {
             Toast.makeText(this, "No location detected", Toast.LENGTH_LONG).show();
-        }
-        else {
+        } else {
             handleNewLocation(location);
         }
     }
@@ -320,7 +325,6 @@ public class MainActivity extends ActionBarActivity implements
         }
 
     }
-
 
 
 }
