@@ -55,9 +55,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/iconImageView"
         android:src="@mipmap/cloudy_night"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        />
+        android:layout_alignBottom="@+id/locationLabel"
+        android:layout_toLeftOf="@+id/locationLabel"
+        android:layout_toStartOf="@+id/locationLabel"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -134,14 +134,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/refreshView"
         android:src="@mipmap/refresh"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
 
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

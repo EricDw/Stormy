@@ -1,4 +1,4 @@
-package com.publicmethod.eric.stormy.utils;
+package com.publicmethod.eric.stormy.weather;
 
 import com.publicmethod.eric.stormy.R;
 
@@ -9,13 +9,13 @@ import java.util.TimeZone;
 /**
  * Created by Owner on 2/24/2015.
  */
-public class CurrentWeather {
-    
-    private String mIcon;
+public class Current {
+
     private long mTime;
     private double mTemperature;
     private double mHumidity;
     private double mPrecipChance;
+    private String mIcon;
     private String mSummary;
     private String mTimeZone;
     private String mPrecipType = "PRECIPITATION";
@@ -23,40 +23,31 @@ public class CurrentWeather {
     public int getIconId() {
         // clear-day, clear-night, rain, snow, sleet, wind, fog, cloudy, partly-cloudy-day, or partly-cloudy-night
         int iconId = R.mipmap.clear_day;
-        
+
         if (mIcon.equals("clear-day")) {
             iconId = R.mipmap.clear_day;
-        }
-        else if (mIcon.equals("clear-night")){
+        } else if (mIcon.equals("clear-night")) {
             iconId = R.mipmap.clear_night;
-        }
-        else if (mIcon.equals("rain")) {
+        } else if (mIcon.equals("rain")) {
             iconId = R.mipmap.rain;
-        }
-        else if (mIcon.equals("snow")) {
+        } else if (mIcon.equals("snow")) {
             iconId = R.mipmap.snow;
-        }
-        else if (mIcon.equals("sleet")) {
+        } else if (mIcon.equals("sleet")) {
             iconId = R.mipmap.sleet;
-        }
-        else if (mIcon.equals("wind")) {
+        } else if (mIcon.equals("wind")) {
             iconId = R.mipmap.wind;
-        }
-        else if (mIcon.equals("fog")) {
+        } else if (mIcon.equals("fog")) {
             iconId = R.mipmap.fog;
-        }
-        else if (mIcon.equals("cloudy")) {
+        } else if (mIcon.equals("cloudy")) {
             iconId = R.mipmap.cloudy;
-        }
-        else if (mIcon.equals("partly-cloudy-day")) {
+        } else if (mIcon.equals("partly-cloudy-day")) {
             iconId = R.mipmap.partly_cloudy;
-        }
-        else if (mIcon.equals("partly-cloudy-night")) {
+        } else if (mIcon.equals("partly-cloudy-night")) {
             iconId = R.mipmap.cloudy_night;
         }
         return iconId;
     }
-    
+
     public String getIcon() {
         return mIcon;
     }
@@ -72,14 +63,14 @@ public class CurrentWeather {
     public void setTime(long time) {
         mTime = time;
     }
-    
+
     public String getFormattedTime() {
         SimpleDateFormat formater = new SimpleDateFormat("h:mm a");
         formater.setTimeZone(TimeZone.getTimeZone(getTimeZone()));
         Date dateTime = new Date(getTime() * 1000);
         String timeString = formater.format(dateTime);
         return timeString;
-        
+
     }
 
     public int getTemperature() {
@@ -121,13 +112,15 @@ public class CurrentWeather {
 
     public void setTimeZone(String timeZone) {
         mTimeZone = timeZone;
-}
+    }
+
     public void setPrecipType(String precipType) {
         mPrecipType = precipType;
-        
+
     }
-    public String getPrecipType(){
+
+    public String getPrecipType() {
         return mPrecipType;
-        
+
     }
 }
