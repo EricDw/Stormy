@@ -7,4 +7,7 @@
     <string name="alert_dialog_error_message">There was an error please try again!</string>
     <string name="alert_dialog_button_positive">OK</string>
     <string name="network_connection_message">Network connection unavailable</string>
+    <string name="title_activity_daily_forcast">7 DAY</string>
+    <string name="no_daily_forecast_data">There is no data to display!</string>
+    <string name="title_activity_hourly_forecast">Hourly Forecast</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.publicmethod.eric.stormy.weather;
 
+import com.publicmethod.eric.stormy.R;
+
 /**
  * Created by Owner on 3/1/2015.
  */
@@ -7,6 +9,34 @@ public class Forecast {
     private Current mCurrent;
     private Hour[] mHourlyForecast;
     private Day[] mDailyForecast;
+
+    public static int getIconId(String iconString) {
+        // clear-day, clear-night, rain, snow, sleet, wind, fog, cloudy, partly-cloudy-day, or partly-cloudy-night
+        int iconId = R.mipmap.clear_day;
+
+        if (iconString.equals("clear-day")) {
+            iconId = R.mipmap.clear_day;
+        } else if (iconString.equals("clear-night")) {
+            iconId = R.mipmap.clear_night;
+        } else if (iconString.equals("rain")) {
+            iconId = R.mipmap.rain;
+        } else if (iconString.equals("snow")) {
+            iconId = R.mipmap.snow;
+        } else if (iconString.equals("sleet")) {
+            iconId = R.mipmap.sleet;
+        } else if (iconString.equals("wind")) {
+            iconId = R.mipmap.wind;
+        } else if (iconString.equals("fog")) {
+            iconId = R.mipmap.fog;
+        } else if (iconString.equals("cloudy")) {
+            iconId = R.mipmap.cloudy;
+        } else if (iconString.equals("partly-cloudy-day")) {
+            iconId = R.mipmap.partly_cloudy;
+        } else if (iconString.equals("partly-cloudy-night")) {
+            iconId = R.mipmap.cloudy_night;
+        }
+        return iconId;
+    }
 
     public Current getCurrent() {
         return mCurrent;
@@ -31,4 +61,5 @@ public class Forecast {
     public void setDailyForecast(Day[] dailyForecast) {
         mDailyForecast = dailyForecast;
     }
+
 }

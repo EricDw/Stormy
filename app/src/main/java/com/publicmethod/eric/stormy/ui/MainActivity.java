@@ -1,6 +1,7 @@
 package com.publicmethod.eric.stormy.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -37,6 +39,7 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 
 public class MainActivity extends ActionBarActivity implements
@@ -44,9 +47,10 @@ public class MainActivity extends ActionBarActivity implements
         GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String DAILY_FORECAST = "DAILY_FORECAST";
+    public static final String HOURLY_FORECAST = "HOURLY_FORECAST";
     private static final String API_KEY = "7d6230957a2c09e2f55ebd39f45d1ada";
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-
     public OkHttpClient mOkHttpClient;
     @InjectView(R.id.temperatureLabel)
     TextView mTemperatureLabel;
@@ -66,12 +70,20 @@ public class MainActivity extends ActionBarActivity implements
     ProgressBar mProgressBar;
     @InjectView(R.id.precipLabel)
     TextView mPrecipLabel;
-    @InjectView(R.id.locationLabel)
+    @InjectView(R.id.dailyLocationLabel)
     TextView mLocationLabel;
+    @InjectView(R.id.hourlyButton)
+    Button mHourlyButton;
+    @InjectView(R.id.dailyButton)
+    Button mDailyButton;
     private double mLatitude;
     private double mLongitude;
     private Forecast mForecast;
     private GoogleApiClient mGoogleApiClient;
+
+    public static String getApiKey() {
+        return API_KEY;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,28 +260,28 @@ public class MainActivity extends ActionBarActivity implements
         return forecast;
     }
 
-    private Day[] getDailyForecast(String jsonData)throws JSONException {
+    private Day[] getDailyForecast(String jsonData) throws JSONException {
 
         JSONObject forecast = new JSONObject(jsonData);
         String timezone = forecast.getString("timezone");
-        
+
         JSONObject daily = forecast.getJSONObject("daily");
         JSONArray data = daily.getJSONArray("data");
 
         Day[] days = new Day[data.length()];
-        
-        for (int i = 0; i < data.length(); i++){
+
+        for (int i = 0; i < data.length(); i++) {
             JSONObject jsonDay = data.getJSONObject(i);
             Day day = new Day();
-            
+
             day.setSummary(jsonDay.getString("summary"));
             day.setIcon(jsonDay.getString("icon"));
             day.setTime(jsonDay.getLong("time"));
             day.setTemperatureMax(jsonDay.getDouble("temperatureMax"));
             day.setTimeZone(timezone);
-            
+
             days[i] = day;
-            
+
         }
         return days;
     }
@@ -280,18 +292,18 @@ public class MainActivity extends ActionBarActivity implements
         String timezone = forcast.getString("timezone");
         JSONObject hourly = forcast.getJSONObject("hourly");
         JSONArray data = hourly.getJSONArray("data");
-        
+
         Hour[] hours = new Hour[data.length()];
-        for (int i = 0; i < data.length(); i++){
+        for (int i = 0; i < data.length(); i++) {
             JSONObject jsonHour = data.getJSONObject(i);
             Hour hour = new Hour();
-            
+
             hour.setSummary(jsonHour.getString("summary"));
             hour.setTemperature(jsonHour.getDouble("temperature"));
             hour.setIcon(jsonHour.getString("icon"));
             hour.setTime(jsonHour.getLong("time"));
             hour.setTimeZone(timezone);
-            
+
             hours[i] = hour;
         }
         return hours;
@@ -321,8 +333,8 @@ public class MainActivity extends ActionBarActivity implements
                 current.setPrecipType(currently.getString("precipType").toUpperCase());
                 Log.i(TAG, "From JSON: " + current.getFormattedTime());
             }
-        }catch (JSONException e){
-            Log.e(TAG,e.getMessage());
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
         }
 
 
@@ -337,10 +349,6 @@ public class MainActivity extends ActionBarActivity implements
             isAvailable = true;
         }
         return isAvailable;
-    }
-
-    public static String getApiKey() {
-        return API_KEY;
     }
 
     public double getLatitude() {
@@ -396,5 +404,21 @@ public class MainActivity extends ActionBarActivity implements
 
     }
 
+    @OnClick(R.id.dailyButton)
+    public void startDailyActivity(View view) {
+
+        Intent intent = new Intent(getApplicationContext(), DailyForcastActivity.class);
+        intent.putExtra(DAILY_FORECAST, mForecast.getDailyForecast());
+        intent.putExtra("timezone", mForecast.getCurrent().getTimeZone());
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.hourlyButton)
+    public void startHourlyActivity(View view) {
+        Intent intent = new Intent(getApplicationContext(), HourlyForecastActivity.class);
+        intent.putExtra(HOURLY_FORECAST, mForecast.getHourlyForecast());
+        startActivity(intent);
+
+    }
 
 }
